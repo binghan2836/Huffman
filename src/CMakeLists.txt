@@ -4,7 +4,7 @@
 #Created Date: Saturday March 30th 2019
 #Author: DaGai  <binghan2836@163.com>
 #-----
-#Last Modified: Saturday March 30th 2019 12:36:30 pm
+#Last Modified: Saturday March 30th 2019 1:41:00 pm
 #Modified By:   the developer formerly known as DaGai
 #-----
 #MIT License
@@ -37,7 +37,4 @@
 aux_source_directory(. SOURCEFILES)
 
 ADD_SUBDIRECTORY(tests)
-
-#add_executable(huffman ${SOURCEFILES})
-
-#TARGET_LINK_LIBRARIES(huffman)
+ADD_SUBDIRECTORY(huffman)
