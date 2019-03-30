@@ -33,5 +33,10 @@
 
 
 #For vscode
-.vscode
+.vscode/
+
+#for cmake
+out/
+
+
 

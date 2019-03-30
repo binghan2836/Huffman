@@ -4,7 +4,7 @@
 #Created Date: Saturday March 30th 2019
 #Author: DaGai  <binghan2836@163.com>
 #-----
-#Last Modified: Saturday March 30th 2019 12:33:51 pm
+#Last Modified: Saturday March 30th 2019 12:36:30 pm
 #Modified By:   the developer formerly known as DaGai
 #-----
 #MIT License
@@ -34,23 +34,10 @@
 #----------    ---    ----------------------------------------------------------
 ###
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+aux_source_directory(. SOURCEFILES)
 
+ADD_SUBDIRECTORY(tests)
 
-PROJECT(huffman)
+#add_executable(huffman ${SOURCEFILES})
 
-IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    MESSAGE(STATUS "current platform: Linux ")
-	ADD_DEFINITIONS(${CMAKE_CXX_FLAGS} "$ENV{CXXFLAGS} -Wall -pthread -DGTEST_HAS_PTHREAD=1 -std=c++11")
-ELSE ()
-    MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
-ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-
-SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/libs/)
-SET (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/bin/)
-INCLUDE_DIRECTORIES(
-	./third_parts/googletest/googletest/include/
-	./third_parts/googletest/googlemock/include/
-)
-ADD_SUBDIRECTORY(third_parts/googletest)
-ADD_SUBDIRECTORY(src)
+#TARGET_LINK_LIBRARIES(huffman)
