@@ -1,10 +1,10 @@
 /*
- * File: huffman_test.cc
+ * File: config.h.in
  * Project: future stream
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday March 30th 2019 8:41:36 pm
+ * Last Modified: Saturday March 30th 2019 5:06:39 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -34,37 +34,4 @@
  * ----------    ---    ----------------------------------------------------------
  */
 
-#include "huffman.h"
-#include <string>
-#include <iostream>
-#include <memory>
-#include "gtest/gtest.h"
-TEST(HffmanTest, CreateNode)
-{
-    Huffman<2,char>  huff2;
-    EXPECT_TRUE(huff2.GetDimension()==2);
-
-    Huffman<3,char>  huff3;
-    EXPECT_TRUE(huff3.GetDimension()==3);
-}
-
-TEST(HffmanTest, Insert)
-{
-    Huffman<3,char> huf;
-
-    huf.Insert((unsigned int)100,'A');
-
-    huf.Insert((unsigned int)20,'B');
-
-    huf.Insert((unsigned int)56,'C');
-
-    huf.Insert((unsigned int)67,'D');
-
-    std::string str = huf.ToString();
-    std::cout << str.c_str();
-    EXPECT_TRUE(str == "weight: 20  value B\nweight: 56  value C\nweight: 67  value D\nweight: 100  value A\n");
-
-    
-
-    
-}
+#cmakedefine OUTPUT2CONSOLE

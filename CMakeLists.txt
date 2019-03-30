@@ -4,7 +4,7 @@
 #Created Date: Saturday March 30th 2019
 #Author: DaGai  <binghan2836@163.com>
 #-----
-#Last Modified: Saturday March 30th 2019 1:02:52 pm
+#Last Modified: Saturday March 30th 2019 5:15:59 pm
 #Modified By:   the developer formerly known as DaGai
 #-----
 #MIT License
@@ -46,8 +46,17 @@ ELSE ()
     MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
 ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/libs/)
+SET (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/lib/)
 SET (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out/bin/)
+
+
+configure_file (
+  "${PROJECT_SOURCE_DIR}/includes/config.h.in"
+  "${PROJECT_SOURCE_DIR}/includes/config.h"
+  )
+option(OUTPUT2CONSOLE "write log to console" ON)
+
+
 INCLUDE_DIRECTORIES(
 	./third_parts/googletest/googletest/include/
 	./third_parts/googletest/googlemock/include/

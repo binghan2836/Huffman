@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday March 30th 2019 1:45:18 pm
+ * Last Modified: Saturday March 30th 2019 4:42:03 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -33,3 +33,7 @@
  * Date          By    Comments
  * ----------    ---    ----------------------------------------------------------
  */
+
+#include <huffman.h>
+#include <iostream>
+

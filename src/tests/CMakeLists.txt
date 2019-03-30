@@ -4,7 +4,7 @@
 #Created Date: Saturday March 30th 2019
 #Author: DaGai  <binghan2836@163.com>
 #-----
-#Last Modified: Saturday March 30th 2019 11:05:04 am
+#Last Modified: Saturday March 30th 2019 4:04:50 pm
 #Modified By:   the developer formerly known as DaGai
 #-----
 #MIT License
@@ -40,5 +40,5 @@ aux_source_directory(. SOURCEFILES)
 
 add_executable(test_main ${SOURCEFILES})
 
-TARGET_LINK_LIBRARIES(test_main gtest gmock)
+TARGET_LINK_LIBRARIES(test_main gtest gmock huffman)
 

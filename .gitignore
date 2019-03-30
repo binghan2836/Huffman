@@ -38,5 +38,8 @@
 #for cmake
 out/
 
+#for version control
+includes/config.h
+
 
 
