@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 9:57:36 am
+ * Last Modified: Sunday March 31st 2019 11:28:10 am
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -75,6 +75,9 @@ TEST(HuffmanTest, Build)
 {
     Huffman<3,char> huf;
 
+    InsertNode(huf);
+
+    huf.Build();
     
 }
 

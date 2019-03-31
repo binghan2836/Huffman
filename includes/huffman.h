@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 10:20:11 am
+ * Last Modified: Sunday March 31st 2019 12:36:58 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -35,23 +35,24 @@
  */
 #include "config.h"
 #include <queue>
+#include <vector>
 #include <memory>
 #include <string>
 #include <sstream>
-
 #include <iostream>
 
 template <const int KWay,class Type>
-struct HuffmanNode
+struct HuffmanLeaf
 {
     typedef unsigned int WeightType;
     typedef Type ValueType;//define huffman held value type
 
+    virtual ~HuffmanLeaf(){}
     /**
      * @brief Construct a new Huffman Node object
      * 
      */
-    HuffmanNode():weight(0),value(ValueType()){}
+    HuffmanLeaf():weight(0),value(ValueType()){}
 
     /**
      * @brief Construct a new Huffman Node object
@@ -59,28 +60,52 @@ struct HuffmanNode
      * @param w 
      * @param v 
      */
-    HuffmanNode(WeightType w,ValueType v):weight(w),value(v){}
+    HuffmanLeaf(WeightType w,ValueType v):weight(w),value(v){}
     
     unsigned int weight;
-    HuffmanNode *links[KWay];
-    HuffmanNode *parents;
+    //HuffmanLeaf *links[KWay];
+    HuffmanLeaf *parents;
 
     Type value;
 };
+
+
+template <const int KWay,class Type>
+struct HuffmanNode:public HuffmanLeaf<KWay,Type>
+{
+    HuffmanLeaf<KWay,Type> *links[KWay];
+
+    HuffmanNode():HuffmanLeaf<KWay,Type>(){}
+
+    HuffmanNode(typename HuffmanLeaf<KWay,Type>::WeightType w):
+    HuffmanLeaf<KWay,Type>(w, typename HuffmanLeaf<KWay,Type>::ValueType()){}
+};
+
 
 
 template <const int KWay,class Ty>
 class Huffman
 {
     
-    typedef HuffmanNode<KWay,Ty> NodeItem;
+    typedef HuffmanLeaf<KWay,Ty> NodeItem;
     typedef std::unique_ptr<NodeItem> Node;
     typedef typename NodeItem::WeightType WeightType;
     typedef typename NodeItem::ValueType ValueType;//define huffman held value type
     
     static const int _dimension = KWay;
+
+    /**
+     * @brief sort all node as ascending order
+     * 
+     */
     typedef std::priority_queue<Node,std::vector<Node>,std::greater<Node> > Sorter;
     Sorter sorter;
+    /**
+     * @brief This vector will hold all node in running context. and will destrcut and release space when app over.
+     * 
+     */
+    typedef std::vector<Node> Container;
+    Container container;
 public:
     static const int GetDimension() {return _dimension;}
     void Insert(WeightType weight,ValueType value);
@@ -92,6 +117,7 @@ public:
     std::string ToString();//display form small to large, sorted by weight in Huffman node
 
 private:
+
     Node GetNode();
 
     /**
@@ -101,6 +127,13 @@ private:
      */
     typename Sorter::size_type GetPaddingLength();
 
+    /**
+     * @brief Create a New Node object
+     * 
+     * @param it
+     * @return Node 
+     */
+    Node CreateNewNode(typename Container::const_iterator it);
 };
 
 
@@ -113,10 +146,10 @@ namespace std
      * @tparam Type 
      */
     template <const int KWay,class Type>
-	struct less<HuffmanNode<KWay,Type> *>
+	struct less<HuffmanLeaf<KWay,Type> *>
 	{
-        //typedef HuffmanNode<KWay,Type> Type;
-		bool operator()(const HuffmanNode<KWay,Type>* n1, const HuffmanNode<KWay,Type>* n2) const
+        //typedef HuffmanLeaf<KWay,Type> Type;
+		bool operator()(const HuffmanLeaf<KWay,Type>* n1, const HuffmanLeaf<KWay,Type>* n2) const
 		{	// apply operator< to operands
 			return n1->weight < n2->weight;
 		}
@@ -151,7 +184,7 @@ std::string Huffman<KWay,Ty>::ToString()
     while(!sorter.empty())
     {
         /**
-         * @brief this way can cut off const attribute, and a right value move 
+         * @brief this way can cut off const attribute, and a right value move behavor
          * 
          */
         Node i(std::move(const_cast<Node &>(sorter.top())));
@@ -169,7 +202,6 @@ typename Huffman<KWay,Ty>::Sorter::size_type Huffman<KWay,Ty>::GetPaddingLength(
     {
         case 2:
             return 0;
-    
         default:
             {
                 typename Sorter::size_type size = sorter.size();
@@ -184,20 +216,65 @@ typename Huffman<KWay,Ty>::Sorter::size_type Huffman<KWay,Ty>::GetPaddingLength(
 }
 
 template <const int KWay,class Ty>
+typename Huffman<KWay,Ty>::Node Huffman<KWay,Ty>::CreateNewNode(typename Huffman<KWay,Ty>::Container::const_iterator it)
+{
+    WeightType weight = WeightType();
+    for(int i = 0;i < GetDimension(); i++)
+    {
+        /**
+         * @brief a little fuzzy, it pointor to a node, node pointor to nodeitem
+         * 
+         */
+        weight += (*(it +i))->weight;
+    }
+    
+    return Node(new NodeItem(weight, ValueType()));
+}
+
+template <const int KWay,class Ty>
 typename Huffman<KWay,Ty>::NodeItem* Huffman<KWay,Ty>::Build()
 {
     typename Sorter::size_type size = sorter.size();
 
-    typename Sorter::size_type pad = GetPaddingLength();
+    if(!size)
+    {
+        return nullptr;
+    }
 
     //add some default nodes to ensure this is a full kway tree.
+    typename Sorter::size_type pad = GetPaddingLength();
     while(pad)
     {
         sorter.push(Node(new NodeItem()));
         pad --;
     }
-    Node node = GetNode();
-    while(node)
+
+    //make the first new node
+    for(int i =0;i < GetDimension();i++)
+    {
+        Node tmp = GetNode();
+
+        if(tmp)
+        {
+            container.push_back(std::move(tmp));
+        }
+    }
+
+    typename Container::const_iterator it = container.begin();
+
+    sorter.push(std::move(CreateNewNode(it)));
+
+    //continue to create other nodes
+    int loop = ((size + pad) - GetDimension())/GetDimension();
+    for(int i = 0; i < loop;i++)
+    {
+        for(int j =0;j <  GetDimension();j++)
+        {
+            
+        }
+    }
 
     return nullptr;
 }
+
+
