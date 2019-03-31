@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 11:28:10 am
+ * Last Modified: Sunday March 31st 2019 2:52:25 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -39,6 +39,7 @@
 #include <iostream>
 #include <memory>
 #include "gtest/gtest.h"
+#include <vector>
 TEST(HffmanTest, CreateNode)
 {
     Huffman<2,char>  huff2;
@@ -77,7 +78,9 @@ TEST(HuffmanTest, Build)
 
     InsertNode(huf);
 
-    huf.Build();
+    Huffman<3,char>::Leaf *leaf = huf.Build();
+
+    EXPECT_TRUE(leaf->GetWeight() == 243);
     
 }
 
