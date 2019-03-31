@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday March 30th 2019 8:41:36 pm
+ * Last Modified: Sunday March 31st 2019 9:57:36 am
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -48,10 +48,9 @@ TEST(HffmanTest, CreateNode)
     EXPECT_TRUE(huff3.GetDimension()==3);
 }
 
-TEST(HffmanTest, Insert)
+template<class Ty>
+void InsertNode(Ty &huf)
 {
-    Huffman<3,char> huf;
-
     huf.Insert((unsigned int)100,'A');
 
     huf.Insert((unsigned int)20,'B');
@@ -59,12 +58,27 @@ TEST(HffmanTest, Insert)
     huf.Insert((unsigned int)56,'C');
 
     huf.Insert((unsigned int)67,'D');
+}
 
+
+TEST(HffmanTest, Insert)
+{
+    Huffman<3,char> huf;
+
+    InsertNode(huf);
     std::string str = huf.ToString();
     std::cout << str.c_str();
-    EXPECT_TRUE(str == "weight: 20  value B\nweight: 56  value C\nweight: 67  value D\nweight: 100  value A\n");
+    EXPECT_TRUE(str == "weight: 20  value B\nweight: 56  value C\nweight: 67  value D\nweight: 100  value A\n");    
+}
 
-    
+TEST(HuffmanTest, Build)
+{
+    Huffman<3,char> huf;
 
     
 }
+
+
+
+
+
