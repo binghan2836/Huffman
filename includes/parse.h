@@ -1,10 +1,10 @@
 /*
- * File: huffman.cc
+ * File: parse.h
  * Project: future stream
- * Created Date: Saturday March 30th 2019
+ * Created Date: Sunday March 31st 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 3:58:05 pm
+ * Last Modified: Sunday March 31st 2019 4:31:53 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -33,32 +33,23 @@
  * Date          By    Comments
  * ----------    ---    ----------------------------------------------------------
  */
+#include <string>
+#include <map>
 
-#include <huffman.h>
-#include <sstream>
-#include "parse.h"
-/**
- * @brief statistics weight and value
- * 
- * @param content 
- */
-void Parse::Statistics(const std::string content)
+class Parse
 {
+    std::map<unsigned char,unsigned int> statis;
+public:
+    void Statistics(const std::string content);
 
-    for(auto i:content)
+    template<class huffman>
+    void Create(huffman& huf) 
     {
-        //statis.insert(i);
-        statis[i] ++;
+        for (auto it:statis)
+        {
+            huf.Insert(it.second,it.first);
+        }
     }
-}
 
-std::string Parse::ToString()
-{
-    std::stringstream  str;
-    for (auto it:statis) 
-    {
-        str << it.first << ", " << it.second << '\n';
-    }
-    return str.str();
-}
-
+    std::string ToString();
+};

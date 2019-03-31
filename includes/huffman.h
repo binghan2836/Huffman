@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 3:01:58 pm
+ * Last Modified: Sunday March 31st 2019 4:44:35 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -221,12 +221,13 @@ typename Huffman<KWay,Ty>::Sorter::size_type Huffman<KWay,Ty>::GetPaddingLength(
         default:
             {
                 typename Sorter::size_type size = sorter.size();
-                typename Sorter::size_type tmp = size - GetDimension();
+                typename Sorter::size_type tmp = GetDimension();
+                size = (size-tmp) % (tmp -1);
                 /**
                  * @brief get how many pad nodes we need 
                  * 
                  */
-                return (tmp % (GetDimension() -1));
+                return tmp -1 -size;
             }
     }
 }
@@ -289,6 +290,7 @@ typename Huffman<KWay,Ty>::Leaf* Huffman<KWay,Ty>::Build()
     }
 
     //get root
+    std::cout << "sorter.size() " << sorter.size() << "\n";
     assert(sorter.size() == 1);
 
     Item root = GetNode();

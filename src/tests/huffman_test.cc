@@ -4,7 +4,7 @@
  * Created Date: Saturday March 30th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Sunday March 31st 2019 2:52:25 pm
+ * Last Modified: Sunday March 31st 2019 4:47:49 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -39,7 +39,7 @@
 #include <iostream>
 #include <memory>
 #include "gtest/gtest.h"
-#include <vector>
+#include "parse.h"
 TEST(HffmanTest, CreateNode)
 {
     Huffman<2,char>  huff2;
@@ -81,10 +81,46 @@ TEST(HuffmanTest, Build)
     Huffman<3,char>::Leaf *leaf = huf.Build();
 
     EXPECT_TRUE(leaf->GetWeight() == 243);
-    
+}
+
+const char * SONNET = 
+"When I do count the clock that tells the time,\n"
+"And see the brave day sunk in hideous night,\n"
+"When I behold the violet past prime,\n"
+"And sable curls all silver'd o'er with white,\n"
+"When lofty trees I see barren of leaves,\n"
+"Which erst from heat did canopy the herd,\n"
+"And summer's green, all girded up in sheaves,\n"
+"Born on the bier with white and bristly beard,\n"
+"Then of thy beauty do I question make,\n"
+"That thou among the wastes of time must go,\n"
+"Since sweets and beauties do themselves forsake,\n"
+"And die as fast as they see others grow,\n"
+"And nothing 'gainst Time's scythe can make defence,\n"
+"Save breed, to brave him when he takes thee hence.\n";
+
+TEST(ParseContent,Parse)
+{
+    Parse parse;
+    parse.Statistics("aaaaddddhhhh");
+
+    std::string str = parse.ToString();
+    std::cout << str.c_str() << "\n";
+
+    EXPECT_TRUE(str == "a, 4\nd, 4\nh, 4\n");
 }
 
 
+//Octous test
+TEST(ParseContent,BuildHuffman)
+{
+    Parse parse;
+    parse.Statistics(SONNET);
 
+    Huffman<8,char> huf;
 
+    parse.Create(huf);
 
+    Huffman<8,char>::Leaf *leaf = huf.Build();
+    EXPECT_TRUE(627 == leaf->GetWeight());
+}
